@@ -1,0 +1,6 @@
+{
+  "name": "Nhi tập viết plot",
+  "description": "Góc tổng hợp character Google AI Studio, tarot, trò chơi và plot sáng tạo của Nhi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

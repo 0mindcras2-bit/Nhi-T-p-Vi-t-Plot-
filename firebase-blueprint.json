@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "Character": {
+      "title": "Character",
+      "description": "A Google AI Studio character created by Nhi",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "avatar": { "type": "string", "maxLength": 500000 },
+        "hashtags": { "type": "array" },
+        "plot": { "type": "string", "maxLength": 5000 },
+        "aiStudioLink": { "type": "string", "maxLength": 500 },
+        "isLocked": { "type": "boolean" },
+        "unlockCost": { "type": "number" },
+        "likes": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "plot", "isLocked", "likes"]
+    },
+    "AppConfig": {
+      "title": "AppConfig",
+      "description": "Global settings for QR code, thank you note, and music playlist",
+      "type": "object",
+      "properties": {
+        "qrUrl": { "type": "string", "maxLength": 500000 },
+        "qrThankYou": { "type": "string", "maxLength": 500 },
+        "playlist": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Feedback and love from readers/visitors",
+      "type": "object",
+      "properties": {
+        "authorName": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "reaction": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["authorName", "message"]
+    },
+    "PlotRequest": {
+      "title": "PlotRequest",
+      "description": "Character or plot requests from readers",
+      "type": "object",
+      "properties": {
+        "authorName": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "genre": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["authorName", "title", "description"]
+    }
+  },
+  "firestore": {
+    "/characters/{characterId}": {
+      "schema": "Character",
+      "description": "Collection of character cards"
+    },
+    "/config/{configId}": {
+      "schema": "AppConfig",
+      "description": "Site configuration for QR and music"
+    },
+    "/feedbacks/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Community feedback messages"
+    },
+    "/requests/{requestId}": {
+      "schema": "PlotRequest",
+      "description": "Plot and character requests"
+    }
+  }
+}

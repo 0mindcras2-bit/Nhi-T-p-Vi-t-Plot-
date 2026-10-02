@@ -1,0 +1,60 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    match /characters/{characterId} {
+      allow read: if true;
+      allow create: if isValidString(request.resource.data.name, 1, 100)
+                    && request.resource.data.plot is string
+                    && request.resource.data.isLocked is bool
+                    && request.resource.data.likes is number;
+      allow update: if (
+        // Allow like increments from any user
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+         && request.resource.data.likes == resource.data.likes + 1)
+        ||
+        // Author updates
+        (isValidString(request.resource.data.name, 1, 100)
+         && request.resource.data.plot is string
+         && request.resource.data.isLocked is bool)
+      );
+      allow delete: if true;
+    }
+
+    match /config/{configId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /feedbacks/{feedbackId} {
+      allow read: if true;
+      allow create: if isValidString(request.resource.data.authorName, 1, 100)
+                    && isValidString(request.resource.data.message, 1, 1000);
+      allow delete: if true;
+    }
+
+    match /requests/{requestId} {
+      allow read: if true;
+      allow create: if isValidString(request.resource.data.authorName, 1, 100)
+                    && isValidString(request.resource.data.title, 1, 200)
+                    && isValidString(request.resource.data.description, 1, 2000);
+      allow delete: if true;
+    }
+
+    match /audio_tracks/{trackId} {
+      allow read, write: if true;
+      match /chunks/{chunkId} {
+        allow read, write: if true;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
